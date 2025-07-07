@@ -13,23 +13,23 @@ const Page = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
-        reset
-    } = useForm();
+        formState: { errors }
+    } = useForm({ mode: 'all' });
+
 
     const onSubmitRegister = (data) => {
         handleRegister(data);
-        reset();
+
     };
 
     const onSubmitLogin = (data) => {
         handleLogin(data);
-        reset();
+
     };
 
     return (
         <div className="h-[100vh] flex justify-center items-center bg-[url('/images/background.jpg')]">
-            <div className="p-4 border border-white backdrop-blur-sm h-[45vh] flex justify-center items-center rounded-2xl">
+            <div className="p-4 border border-white backdrop-blur-sm min-h-[45vh] flex justify-center items-center rounded-2xl">
                 {showRegister ? (
                     <form
                         className="w-[300px] flex flex-col justify-center items-center gap-2 text-white"
@@ -62,23 +62,27 @@ const Page = () => {
                     </form>
                 ) : (
                     <form
-                        className="w-[300px] flex flex-col justify-center items-center gap-4 text-white"
+                        className="w-[300px] py-6 flex flex-col justify-center items-center gap-4 text-white"
                         onSubmit={handleSubmit(onSubmitLogin)}
                     >
                         <h1>Login</h1>
                         <Input
                             className='border-2 border-white bg-transparent placeholder:text-white'
                             type="email"
+                            name="email"
                             placeholder="Email"
-                            register={register("email", emailValidation)}
-                            error={errors.email?.message}
+                            validation = {emailValidation}
+                            register={register}
+                            error={errors.email && errors.email.message}
                         />
                         <Input
                             className='border-2 border-white bg-transparent placeholder:text-white'
                             type="password"
+                            name="password"
                             placeholder="Password"
-                            register={register("password", passwordValidation)}
-                            error={errors.password?.message}
+                            validation = {passwordValidation}
+                            register={register}
+                            error={errors.password && errors.password.message}
                         />
                         <button type="submit">Login</button>
                         <button type="button" onClick={() => setShowRegister(true)}>Don't have an account?</button>
