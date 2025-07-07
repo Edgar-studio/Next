@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "d1b5",
+      "username": "sdfhddfh",
+      "email": "samvel1973@seznam.cz",
+      "password": "dfgjhdfh"
+    },
+    {
+      "id": "9097",
+      "username": "admin",
+      "email": "admin@mail.ru",
+      "password": "Admin123"
+    }
+  ]
+}

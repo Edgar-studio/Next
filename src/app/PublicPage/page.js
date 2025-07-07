@@ -2,89 +2,53 @@
 
 
 import React, {useEffect, useState} from 'react';
+import useAuth from "@/app/utils/useAuth";
 
 const Page = () => {
-    const [showRegister, setShowRegister] = useState(true);
+    const [showRegister, setShowRegister] = useState(false);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        let getUsers = JSON.parse(localStorage.getItem("users")) || [];
-        setUsers(getUsers);
-    }, [])
+    const {handleLogin, handleRegister} = useAuth()
 
-    function Show() {
+    function Show(e) {
+        e.preventDefault();
         setShowRegister(() => !showRegister)
     }
 
-    function handleLogin(e) {
-        e.preventDefault();
 
-       if(email && password){
-           const findUser = users.find(user => user.password === password || user.email === email);
-           if (findUser) {
-               localStorage.setItem("Token", JSON.stringify(findUser.username));
-           }else {
-               alert("Please enter a valid email or password");
-           }
-       }else {
-           alert("Input is datark")
-       }
-    }
-
-    function handleRegister(e) {
-        e.preventDefault();
-        const findUser = users.find(user => user.username === username || user.email === email);
-        if (!findUser) {
-            if (username && email && password) {
-                const newUser = {
-                    username,
-                    email,
-                    password,
-                }
-                const updatedUsers = [...users, newUser]
-                setUsers(updatedUsers)  ;
-                localStorage.setItem("users", JSON.stringify(updatedUsers));
-                console.log(users);
-            }else{
-                alert("Input is datark");
-            }
-        } else {
-            alert("Username already exists");
-        }
-
-    }
-
-    useEffect(() => {
-        console.log(showRegister)
-    }, [showRegister]);
 
     return (
-        <div className="h-[80vh] flex justify-center items-center) bg-[url('/images/background.jpg')] ">
-            <div className="p-4 bg-blue-100 min-h-[25vh] border-b border-blue-300 rounded-2xl">
+        <div className="h-[100vh] flex justify-center items-center bg-[url('/images/background.jpg')] ">
+            <div className="p-4 border border-white backdrop-blur-sm h-[45vh] flex justify-center items-center rounded-2xl">
                 {showRegister === true ? (
                     <form
-                        className="w-[300px] flex flex-col justify-center items-center gap-2"
-                        action="" onSubmit={handleRegister}>
+                        className="w-[300px] flex flex-col justify-center items-center gap-2 text-white"
+                        action="" onSubmit={(e)=>{
+                            e.preventDefault();
+                        handleRegister({username, email, password})
+                    }}>
                         <h1>Register</h1>
-                        <input type="text" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
-                        <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-                        <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="text" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
+                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
                         <button type={"submit"}>Register</button>
-                        <button onClick={Show}>Already have an account?</button>
+                        <button type={"button"} onClick={Show}>Already have an account?</button>
                     </form>
                 ) : (
                     <form
+                        className="w-[300px] flex flex-col justify-center items-center gap-4 text-white"
 
-                        action="" onSubmit={handleLogin}>
+                        onSubmit={(e)=>{
+                            e.preventDefault();
+                            handleLogin({email, password});
+                    }}>
                         <h1>Login</h1>
-                        <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-                        <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
-                        <button type={"submit"}>Login</button>
-                        <button onClick={Show}>Don't have an account?</button>
-
+                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+                        <button type="submit">Login</button>
+                        <button type="button" onClick={(e)=>{Show(e)}}>Don't have an account?</button>
                     </form>
                 )}
 
