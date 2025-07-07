@@ -1,58 +1,89 @@
 "use client";
 
-
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import useAuth from "@/app/utils/useAuth";
+import Input from "@/app/components/UI/Input";
+import { useForm } from "react-hook-form";
+import { emailValidation, passwordValidation, usernameValidation } from "@/app/utils/Validations";
 
 const Page = () => {
     const [showRegister, setShowRegister] = useState(false);
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { handleLogin, handleRegister } = useAuth();
 
-    const {handleLogin, handleRegister} = useAuth()
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm();
 
-    function Show(e) {
-        e.preventDefault();
-        setShowRegister(() => !showRegister)
-    }
+    const onSubmitRegister = (data) => {
+        handleRegister(data);
+        reset();
+    };
 
-
+    const onSubmitLogin = (data) => {
+        handleLogin(data);
+        reset();
+    };
 
     return (
-        <div className="h-[100vh] flex justify-center items-center bg-[url('/images/background.jpg')] ">
+        <div className="h-[100vh] flex justify-center items-center bg-[url('/images/background.jpg')]">
             <div className="p-4 border border-white backdrop-blur-sm h-[45vh] flex justify-center items-center rounded-2xl">
-                {showRegister === true ? (
+                {showRegister ? (
                     <form
                         className="w-[300px] flex flex-col justify-center items-center gap-2 text-white"
-                        action="" onSubmit={(e)=>{
-                            e.preventDefault();
-                        handleRegister({username, email, password})
-                    }}>
+                        onSubmit={handleSubmit(onSubmitRegister)}
+                    >
                         <h1>Register</h1>
-                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="text" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
-                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
-                        <button type={"submit"}>Register</button>
-                        <button type={"button"} onClick={Show}>Already have an account?</button>
+                        <Input
+                            className='border-2 border-white bg-transparent placeholder:text-white'
+                            type="text"
+                            placeholder="Username"
+                            register={register("username", usernameValidation)}
+                            error={errors.username?.message}
+                        />
+                        <Input
+                            className='border-2 border-white bg-transparent placeholder:text-white'
+                            type="email"
+                            placeholder="Email"
+                            register={register("email", emailValidation)}
+                            error={errors.email?.message}
+                        />
+                        <Input
+                            className='border-2 border-white bg-transparent placeholder:text-white'
+                            type="password"
+                            placeholder="Password"
+                            register={register("password", passwordValidation)}
+                            error={errors.password?.message}
+                        />
+                        <button type="submit">Register</button>
+                        <button type="button" onClick={() => setShowRegister(false)}>Already have an account?</button>
                     </form>
                 ) : (
                     <form
                         className="w-[300px] flex flex-col justify-center items-center gap-4 text-white"
-
-                        onSubmit={(e)=>{
-                            e.preventDefault();
-                            handleLogin({email, password});
-                    }}>
+                        onSubmit={handleSubmit(onSubmitLogin)}
+                    >
                         <h1>Login</h1>
-                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-                        <input className='border-2  border-white bg-transparent placeholder:text-white' type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+                        <Input
+                            className='border-2 border-white bg-transparent placeholder:text-white'
+                            type="email"
+                            placeholder="Email"
+                            register={register("email", emailValidation)}
+                            error={errors.email?.message}
+                        />
+                        <Input
+                            className='border-2 border-white bg-transparent placeholder:text-white'
+                            type="password"
+                            placeholder="Password"
+                            register={register("password", passwordValidation)}
+                            error={errors.password?.message}
+                        />
                         <button type="submit">Login</button>
-                        <button type="button" onClick={(e)=>{Show(e)}}>Don't have an account?</button>
+                        <button type="button" onClick={() => setShowRegister(true)}>Don't have an account?</button>
                     </form>
                 )}
-
-
             </div>
         </div>
     );
