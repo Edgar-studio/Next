@@ -1,21 +1,20 @@
-
-
-import React, {useEffect} from 'react';
-
+import React from 'react';
 
 const Input = ({ name, register, validation, error, ...props }) => {
-
-
     return (
-        <div>
-
+        <div className="w-full flex flex-col items-center">
             <input
                 {...register(name, validation)}
-                    className={`w-3/5 h-8 mx-auto mt-4 p-3 border-none outline-none rounded-md block text-white 
-                    bg-gradient-to-r from-[#7d20f7] via-[#3958e3] to-[#3f0096]' : 'bg-gray-700`}
-                    {...props}/>
-            {error && <p className="w-full h-8 flex items-center justify-center
-                mx-auto text-red-500">{error}</p>}
+                className={`w-3/5 h-10 mt-3 px-4 py-2 rounded-md text-white 
+          bg-gradient-to-r from-[#7d20f7] via-[#3958e3] to-[#3f0096] 
+          placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200`}
+                {...props}
+            />
+            {error && (
+                <p className="text-sm text-red-400 mt-1 w-3/5 text-center">
+                    {error}
+                </p>
+            )}
         </div>
     );
 };
